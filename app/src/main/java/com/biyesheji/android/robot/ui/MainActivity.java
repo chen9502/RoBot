@@ -1,9 +1,10 @@
-package com.biyesheji.android.robot;
+package com.biyesheji.android.robot.ui;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+import com.biyesheji.android.robot.R;
+
+public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
