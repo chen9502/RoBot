@@ -16,6 +16,7 @@ public class ViewHolderUtils {
         View view = array.get(viewId);
         if(view ==null){
             view  = conterView.findViewById(viewId);
+            array.put(viewId,view);
         }
         return view;
     }
