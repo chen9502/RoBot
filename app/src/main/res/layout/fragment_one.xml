@@ -1,0 +1,134 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.biyesheji.android.robot.fragment.OneFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:id="@+id/one_specialTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="个性动作指令"
+        android:layout_margin="20dp"
+        android:textColor="#000"
+        />
+
+    <Button
+        android:id="@+id/one_lianxvBtn"
+        android:layout_width="175dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/one_specialTv"
+        android:background="@drawable/anniu_btn"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="20dp"
+        android:text="连续动作"
+        android:textColor="#fff"
+        />
+    <Button
+        android:id="@+id/one_ganenBtn"
+        android:layout_width="175dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/one_specialTv"
+        android:layout_toRightOf="@id/one_lianxvBtn"
+        android:background="@drawable/anniu_btn"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="20dp"
+        android:text="感恩的心"
+        android:textColor="#fff"
+        />
+
+    <TextView
+        android:id="@+id/one_zhitiTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="肢体动作指令"
+        android:layout_below="@id/one_lianxvBtn"
+        android:layout_margin="20dp"
+        />
+
+    <Button
+        android:id="@+id/one_changxiufeiwuBtn"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/one_zhitiTv"
+        android:layout_margin="10dp"
+        android:background="@drawable/anniu_btn"
+        android:text="长袖飞舞"
+        android:textColor="#fff"
+        />
+    <Button
+        android:id="@+id/one_feixiangBtn"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/one_zhitiTv"
+        android:layout_toRightOf="@id/one_changxiufeiwuBtn"
+        android:layout_margin="10dp"
+        android:background="@drawable/anniu_btn"
+        android:text="飞翔"
+        android:textColor="#fff"
+        />
+
+    <Button
+        android:id="@+id/one_diziguiBtn"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/one_zhitiTv"
+        android:layout_toRightOf="@id/one_feixiangBtn"
+        android:layout_margin="10dp"
+        android:background="@drawable/anniu_btn"
+        android:text="弟子规"
+        android:textColor="#fff"
+        />
+
+    <Button
+        android:id="@+id/one_yougongfanBtn"
+        android:layout_width="175dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/one_changxiufeiwuBtn"
+        android:background="@drawable/anniu_btn"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="20dp"
+        android:text="右弓翻"
+        android:textColor="#fff"
+        />
+
+    <Button
+        android:id="@+id/one_daoliBtn"
+        android:layout_width="175dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/one_changxiufeiwuBtn"
+        android:layout_toRightOf="@id/one_yougongfanBtn"
+        android:background="@drawable/anniu_btn"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="20dp"
+        android:text="倒立"
+        android:textColor="#fff"
+        />
+
+    <TextView
+        android:id="@+id/one_other"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="其它"
+        android:textColor="#000"
+        android:layout_margin="20dp"
+        android:layout_below="@id/one_yougongfanBtn"
+        />
+
+    <Button
+        android:id="@+id/one_changeBtn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_below="@id/one_other"
+        android:background="@drawable/anniu_btn"
+        android:text="切换模式"
+        android:textColor="#fff"/>
+
+</RelativeLayout>
