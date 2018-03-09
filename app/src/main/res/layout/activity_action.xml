@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_action"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.ActionActivity">
+
+    <RadioGroup
+        android:id="@+id/rg"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:background="#D15728">
+
+        <RadioButton
+            android:id="@+id/rb_biaozhun"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            android:text="经典动作模式"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:checked="true"
+            android:layout_margin="10dp"/>
+        <RadioButton
+            android:id="@+id/rb_gexin"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            android:button="@null"
+            android:text="三维动作模式"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:layout_margin="10dp"/>
+        <RadioButton
+            android:id="@+id/rb_yuyin"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            android:button="@null"
+            android:text="设置"
+            android:textSize="15sp"
+            android:layout_margin="10dp"
+            android:gravity="center"/>
+    </RadioGroup>
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+    />
+</LinearLayout>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:paddingBottom="10dp"
+              android:paddingLeft="10dp"
+              android:paddingRight="10dp"
+              android:gravity="center"
+              android:paddingTop="10dp"
+    >
+
+
+    <Button
+        android:id="@+id/rb_wifimode"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/wifimode"
+        android:text="点 击 连 接 至 WIFI 路 由 器"
+        android:textAlignment="center"
+        android:textColor="#fff"
+        android:textSize="20sp"/>
+
+
+    <Button
+        android:id="@+id/btn_connectRobot"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="60dp"
+        android:enabled="false"
+        android:text="连接机器人"
+        android:textColor="#fff"
+        android:textSize="20sp"/>
+
+
+</LinearLayout>

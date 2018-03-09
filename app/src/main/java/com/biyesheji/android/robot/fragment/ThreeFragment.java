@@ -12,7 +12,7 @@ import com.biyesheji.android.robot.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ThreeFragment extends Fragment {
+public class ThreeFragment extends BaseFragment {
 
 
     public ThreeFragment() {

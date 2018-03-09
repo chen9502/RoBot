@@ -1,7 +1,5 @@
 package com.biyesheji.android.robot.ui;
 
-import android.support.design.widget.TabLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,7 +8,7 @@ import android.widget.TextView;
 
 import com.biyesheji.android.robot.R;
 
-public class FourKindActivity extends AppCompatActivity {
+public class FourKindActivity extends BaseActivity {
 
     private TextView yuandiTv;
     private LinearLayout yuandiOneLl;
@@ -54,6 +52,6 @@ public class FourKindActivity extends AppCompatActivity {
         wudaoTv = findViewById(R.id.two_wudaoTv);
         wudaoLl = findViewById(R.id.two_wudaoLl);
         otherTv = findViewById(R.id.two_otherTv);
-        otherBtn = findViewById(R.id.two_otherBtn);
+        otherBtn = findViewById(R.id.fragment_two_moShiQieHuan);
     }
 }

@@ -37,28 +37,7 @@ public class MainActivity extends BaseActivity {
                  * 这个业务逻辑先不写,假设连接成功，先跳转
                  */
 
-                switch (kind){
-                    case "1":
-                        Intent intent = new Intent(MainActivity.this,OneKindActivity.class);
-                        startActivity(intent);
-                        break;
-                    case "2":
-                        Intent intent1 = new Intent(MainActivity.this,TwoKindActivity.class);
-                        startActivity(intent1);
-                        break;
-                    case "3":
-                        Intent intent2 = new Intent(MainActivity.this,ThreeKindActivity.class);
-                        startActivity(intent2);
-                        break;
-                    case "4":
-                        Intent intent3 = new Intent(MainActivity.this,FourKindActivity.class);
-                        startActivity(intent3);
-                        break;
-                    case "5":
-                        Intent intent4 = new Intent(MainActivity.this,FiveKindActivity.class);
-                        startActivity(intent4);
-                        break;
-                }
+
             }
         });
 
@@ -68,4 +47,6 @@ public class MainActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
     }
+
+
 }

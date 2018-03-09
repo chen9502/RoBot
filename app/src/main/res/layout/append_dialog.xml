@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="指令名称:"/>
+        <EditText
+            android:id="@+id/et_mingcheng"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:imeOptions="actionSearch"
+            android:layout_height="wrap_content"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="指令编号:"/>
+        <EditText
+            android:id="@+id/et_bianhao"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:inputType="number"
+            android:hint="请输入数字"
+            android:layout_height="wrap_content"
+            />
+    </LinearLayout>
+
+   <!-- <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/dailog_cancel"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="取消"
+            android:textColor="#fff"
+            android:textSize="18sp"
+            android:background="@drawable/rbshape"
+            android:layout_margin="10dp"/>
+        <Button
+            android:id="@+id/dailog_sure"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="确定"
+            android:textColor="#fff"
+            android:textSize="18sp"
+            android:background="@drawable/rbshape"
+            android:layout_margin="10dp"/>
+    </LinearLayout>-->
+
+</LinearLayout>

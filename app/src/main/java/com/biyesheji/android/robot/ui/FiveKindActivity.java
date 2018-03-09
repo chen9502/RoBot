@@ -1,6 +1,5 @@
 package com.biyesheji.android.robot.ui;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,7 +8,7 @@ import android.widget.TextView;
 
 import com.biyesheji.android.robot.R;
 
-public class FiveKindActivity extends AppCompatActivity {
+public class FiveKindActivity extends BaseActivity {
 
     private TextView xingjinTv;
     private LinearLayout xingjinLl;
@@ -53,6 +52,6 @@ public class FiveKindActivity extends AppCompatActivity {
         zhitiTv = findViewById(R.id.two_zhitiTv);
         zhitiLl = findViewById(R.id.two_zhitiLl);
         otherTv = findViewById(R.id.two_otherTv);
-        otherBtn = findViewById(R.id.two_otherBtn);
+        otherBtn = findViewById(R.id.fragment_two_moShiQieHuan);
     }
 }

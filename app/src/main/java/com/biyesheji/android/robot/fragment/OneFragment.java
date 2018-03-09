@@ -13,7 +13,7 @@ import com.biyesheji.android.robot.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class OneFragment extends Fragment {
+public class OneFragment extends BaseFragment {
 
     private Button lianxvdongzuoBtn;
     private Button ganenBtn;

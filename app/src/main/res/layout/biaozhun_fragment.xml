@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFF"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:weightSum="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="10dp"
+                    android:text="运行模式切换"
+                    android:textSize="20sp" />
+
+                <Button
+                    android:id="@+id/btn_mode_biaozhun"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_margin="5dp"
+                    android:text="切换到经典动作模式"
+                    android:textColor="#fff"
+                    android:textSize="20sp"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="#000"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="15dp"
+                android:text="原地动作指令"
+                android:textSize="20sp"
+                android:id="@+id/textView3" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp">
+
+                <Button
+                    android:id="@+id/btn_zuozhuan"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="15dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btnpresshuang"
+                    android:text="左转"
+                    android:textSize="20sp"
+                    android:textColor="#fff"/>
+
+                <Button
+                    android:id="@+id/btn_youzhuan"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="15dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btnpresshuang"
+                    android:text="右转"
+                    android:textSize="20sp"
+                    android:textColor="#fff"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp">
+
+                <Button
+                    android:id="@+id/btn_fuwocheng"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="15dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btnpresshuang"
+                    android:text="俯卧撑"
+                    android:textSize="20sp"
+                    android:textColor="#fff"/>
+
+                <Button
+                    android:id="@+id/btn_yangwoqizuo"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="15dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btnpresshuang"
+                    android:text="仰卧起坐"
+                    android:textSize="20sp"
+                    android:textColor="#fff"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp">
+
+                <Button
+                    android:id="@+id/btn_zuotitui"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="15dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btnpresshuang"
+                    android:text="左踢腿"
+                    android:textColor="#fff"
+                    android:textSize="20sp" />
+
+                <Button
+                    android:id="@+id/btn_youtitui"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="15dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btnpresshuang"
+                    android:text="右踢腿"
+                    android:textSize="20sp"
+                    android:textColor="#fff"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp">
+                <Button
+                    android:id="@+id/btn_zuojingli"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="15dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btnpresshuang"
+                    android:text="左敬礼"
+                    android:textSize="20sp"
+                    android:textColor="#fff"/>
+                <Button
+                    android:id="@+id/btn_youjingli"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="15dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btnpresshuang"
+                    android:text="右敬礼"
+                    android:textSize="20sp"
+                    android:textColor="#fff"/>
+
+
+
+            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#000"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="20dp"
+                android:text="行进动作指令"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp">
+
+                <Button
+                    android:id="@+id/btn_zoupingyi"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="15dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btnpress"
+                    android:text="左平移"
+                    android:textColor="#fff"
+                    android:textSize="20sp"/>
+                <Button
+                    android:id="@+id/btn_youpingyi"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="15dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btnpress"
+                    android:text="右平移"
+                    android:textColor="#fff"
+                    android:textSize="20sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp">
+
+                <Button
+                    android:id="@+id/btn_qiangunfan"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="15dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btnpress"
+                    android:text="前滚翻"
+                    android:textColor="#fff"
+                    android:textSize="20sp"/>
+
+                <Button
+                    android:id="@+id/btn_hougunfan"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="15dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btnpress"
+                    android:text="后滚翻"
+                    android:textColor="#fff"
+                    android:textSize="20sp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp">
+
+                <Button
+                    android:id="@+id/btn_qianpaxia"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="15dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btnpress"
+                    android:text="前趴下"
+                    android:textColor="#fff"
+                    android:textSize="20sp"/>
+
+                <Button
+                    android:id="@+id/btn_houpaxia"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="15dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btnpress"
+                    android:text="后趴下"
+                    android:textColor="#fff"
+                    android:textSize="20sp"/>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp">
+
+                <Button
+                    android:id="@+id/btn_qianjing"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="15dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btnpress"
+                    android:text="前进"
+                    android:textColor="#fff"
+                    android:textSize="20sp"/>
+
+                <Button
+                    android:id="@+id/btn_houtui"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="15dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btnpress"
+                    android:text="后退"
+                    android:textColor="#fff"
+                    android:textSize="20sp"/>
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp">
+
+                <Button
+                    android:id="@+id/btn_ticao"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="50dp"
+                    android:text="体操"
+                    android:textColor="#fff"
+                    android:background="@drawable/btnpress"
+                    android:layout_margin="15dp"
+                    android:textSize="20sp"/>
+                <Button
+                    android:id="@+id/btn_jiewu"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="50dp"
+                    android:text="街舞"
+                    android:textColor="#fff"
+                    android:background="@drawable/btnpress"
+                    android:layout_margin="15dp"
+                    android:textSize="20sp"/>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp">
+
+                <Button
+                    android:id="@+id/btn_daoli"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="15dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btnpress"
+                    android:text="倒立"
+                    android:visibility="gone"
+                    android:textColor="#fff"
+                    android:textSize="20sp"/>
+
+                    <Button
+                        android:id="@+id/btn_qiaoxiyang"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="50dp"
+                        android:text="俏 夕 阳"
+                        android:textColor="#fff"
+                        android:background="@drawable/btnpress"
+                        android:layout_margin="15dp"
+                        android:textSize="20sp"/>
+
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

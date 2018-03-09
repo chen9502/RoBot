@@ -1,12 +1,11 @@
 package com.biyesheji.android.robot.ui;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
 import com.biyesheji.android.robot.R;
 
-public class ThreeKindActivity extends AppCompatActivity {
+public class ThreeKindActivity extends BaseActivity {
 
     private TextView xingjinTv;
 
