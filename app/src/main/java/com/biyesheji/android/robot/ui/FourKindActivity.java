@@ -31,7 +31,6 @@ public class FourKindActivity extends BaseActivity {
     private TextView wudaoTv;
     private LinearLayout wudaoLl;
     private TextView otherTv;
-    private Button otherBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +53,6 @@ public class FourKindActivity extends BaseActivity {
         wudaoTv.setVisibility(View.GONE);
         wudaoLl.setVisibility(View.GONE);
         otherTv.setVisibility(View.GONE);
-        otherBtn.setVisibility(View.GONE);
     }
 
     private void initView() {

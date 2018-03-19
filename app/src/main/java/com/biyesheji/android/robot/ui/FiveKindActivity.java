@@ -29,7 +29,6 @@ public class FiveKindActivity extends BaseActivity {
     private TextView zhitiTv;
     private LinearLayout zhitiLl;
     private TextView otherTv;
-    private Button otherBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +51,6 @@ public class FiveKindActivity extends BaseActivity {
         zhitiTv.setVisibility(View.GONE);
         zhitiLl.setVisibility(View.GONE);
         otherTv.setVisibility(View.GONE);
-        otherBtn.setVisibility(View.GONE);
     }
 
     private void initView() {
