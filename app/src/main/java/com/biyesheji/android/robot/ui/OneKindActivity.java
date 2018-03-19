@@ -9,7 +9,7 @@ import android.support.v4.view.ViewPager;
 
 import com.biyesheji.android.robot.R;
 import com.biyesheji.android.robot.adapter.OneKindAdapter;
-import com.biyesheji.android.robot.fragment.OneFragment;
+import com.biyesheji.android.robot.fragment.GexinFragment;
 import com.biyesheji.android.robot.fragment.ThreeFragment;
 import com.biyesheji.android.robot.fragment.TwoFragment;
 
@@ -37,8 +37,8 @@ public class OneKindActivity extends BaseActivity {
         titles.add("标准动作模式");
         titles.add("语音模式");
 
+        fragments.add(new GexinFragment());
         fragments.add(new TwoFragment());
-        fragments.add(new OneFragment());
         fragments.add(new ThreeFragment());
 
         FragmentManager fm = getSupportFragmentManager();

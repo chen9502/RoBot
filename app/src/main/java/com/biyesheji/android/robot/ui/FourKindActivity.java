@@ -7,9 +7,22 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.biyesheji.android.robot.R;
+import com.biyesheji.android.robot.socket.GsonList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class FourKindActivity extends BaseActivity {
 
+    @BindView(R.id.fragment_two_zuoZhuan)
+    Button fragmentTwoZuoZhuan;
+    @BindView(R.id.fragment_two_qianJing)
+    Button fragmentTwoQianJing;
+    @BindView(R.id.fragment_two_houTui)
+    Button fragmentTwoHouTui;
+    @BindView(R.id.fragment_two_youZhuan)
+    Button fragmentTwoYouZhuan;
     private TextView yuandiTv;
     private LinearLayout yuandiOneLl;
     private LinearLayout yuandiTwoLl;
@@ -24,6 +37,7 @@ public class FourKindActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_two);
+        ButterKnife.bind(this);
 
         initView();
 
@@ -32,15 +46,15 @@ public class FourKindActivity extends BaseActivity {
     }
 
     private void miss() {
-        yuandiTv.setVisibility(View.INVISIBLE);
-        yuandiOneLl.setVisibility(View.INVISIBLE);
-        yuandiTwoLl.setVisibility(View.INVISIBLE);
-        zhitiTv.setVisibility(View.INVISIBLE);
-        zhitiLl.setVisibility(View.INVISIBLE);
-        wudaoTv.setVisibility(View.INVISIBLE);
-        wudaoLl.setVisibility(View.INVISIBLE);
-        otherTv.setVisibility(View.INVISIBLE);
-        otherBtn.setVisibility(View.INVISIBLE);
+        yuandiTv.setVisibility(View.GONE);
+        yuandiOneLl.setVisibility(View.GONE);
+        yuandiTwoLl.setVisibility(View.GONE);
+        zhitiTv.setVisibility(View.GONE);
+        zhitiLl.setVisibility(View.GONE);
+        wudaoTv.setVisibility(View.GONE);
+        wudaoLl.setVisibility(View.GONE);
+        otherTv.setVisibility(View.GONE);
+        otherBtn.setVisibility(View.GONE);
     }
 
     private void initView() {
@@ -52,6 +66,23 @@ public class FourKindActivity extends BaseActivity {
         wudaoTv = findViewById(R.id.two_wudaoTv);
         wudaoLl = findViewById(R.id.two_wudaoLl);
         otherTv = findViewById(R.id.two_otherTv);
-        otherBtn = findViewById(R.id.fragment_two_moShiQieHuan);
+    }
+
+    @OnClick({R.id.fragment_two_zuoZhuan, R.id.fragment_two_qianJing, R.id.fragment_two_houTui, R.id.fragment_two_youZhuan})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.fragment_two_zuoZhuan:
+                GsonList.gsonList("actioncontrol",255,"default","biaozhun","zuozhuan");
+                break;
+            case R.id.fragment_two_qianJing:
+                GsonList.gsonList("actioncontrol",255,"default","biaozhun","qianjing");
+                break;
+            case R.id.fragment_two_houTui:
+                GsonList.gsonList("actioncontrol",255,"default","biaozhun","houtui");
+                break;
+            case R.id.fragment_two_youZhuan:
+                GsonList.gsonList("actioncontrol",255,"default","biaozhun","youzhuan");
+                break;
+        }
     }
 }

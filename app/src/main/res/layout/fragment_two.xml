@@ -290,15 +290,6 @@
         android:layout_below="@id/two_wudaoLl"
         android:layout_margin="10dp"
         />
-    <Button
-        android:id="@+id/fragment_two_moShiQieHuan"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/anniu_btn"
-        android:text="模式切换"
-        android:textColor="#fff"
-        android:layout_below="@id/two_otherTv"/>
+
 
 </RelativeLayout>

@@ -21,49 +21,20 @@
 
            >
             <TextView
+                android:id="@+id/one_specialTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="运行模式切换"
-                android:textSize="20sp"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="5dp"/>
-
-            <Button
-                android:id="@+id/btn_mode_gexin"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:text="切换到三维动作模式"
-                android:layout_margin="5dp"
-                android:textColor="#fff"
-                android:textSize="20sp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="#000"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="三维动作指令"
-                android:textSize="20sp"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="5dp"/>
-            <com.gfw.robot.viewgrid.Mygridview
+                android:text="个性动作指令"
+                android:layout_margin="20dp"
+                android:textColor="#000"
+                />
+            <com.biyesheji.android.robot.entity.Mygridview
                 android:id="@+id/gridView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:numColumns="2"
                 android:layout_margin="5dp">
-            </com.gfw.robot.viewgrid.Mygridview>
+            </com.biyesheji.android.robot.entity.Mygridview>
         </LinearLayout>
 
 
@@ -84,8 +55,7 @@
             android:onClick="append_onclick"
             android:text="添加指令"
             android:textColor="#FFF"
-            android:textSize="18dp"
-            android:background="@drawable/btnpresshuang"
+            android:background="@drawable/anniu_btn"
             android:layout_margin="10dp"/>
         <Button
             android:id="@+id/btn_del"

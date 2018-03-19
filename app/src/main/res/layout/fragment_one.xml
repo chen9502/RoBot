@@ -110,25 +110,6 @@
         android:textColor="#fff"
         />
 
-    <TextView
-        android:id="@+id/one_other"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="其它"
-        android:textColor="#000"
-        android:layout_margin="20dp"
-        android:layout_below="@id/one_yougongfanBtn"
-        />
 
-    <Button
-        android:id="@+id/one_changeBtn"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_below="@id/one_other"
-        android:background="@drawable/anniu_btn"
-        android:text="切换模式"
-        android:textColor="#fff"/>
 
 </RelativeLayout>

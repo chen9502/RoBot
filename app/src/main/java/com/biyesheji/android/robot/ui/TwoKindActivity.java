@@ -8,7 +8,7 @@ import android.support.v4.view.ViewPager;
 
 import com.biyesheji.android.robot.R;
 import com.biyesheji.android.robot.adapter.OneKindAdapter;
-import com.biyesheji.android.robot.fragment.OneFragment;
+import com.biyesheji.android.robot.fragment.GexinFragment;
 import com.biyesheji.android.robot.fragment.TwoFragment;
 
 import java.util.ArrayList;
@@ -36,8 +36,8 @@ public class TwoKindActivity extends BaseActivity {
         titles.add("个性动作模式");
         titles.add("标准动作模式");
 
+        fragments.add(new GexinFragment());
         fragments.add(new TwoFragment());
-        fragments.add(new OneFragment());
 
 
         FragmentManager fm = getSupportFragmentManager();

@@ -79,6 +79,7 @@ public class MyApp extends Application{
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
+
                 String strIp = msg.obj.toString();
                 int msgType = msg.arg1;
                 switch (msgType){
@@ -93,6 +94,7 @@ public class MyApp extends Application{
                                 }
                             }
                         }
+
 
                         ConnectToServer.isRurning = false;
                         SystemClock.sleep(500);
@@ -438,6 +440,7 @@ public class MyApp extends Application{
             if(socketclient == true){
                 Log.d("wxwx","------broadcastReceiver1  连接到维维---------------");
                 showToast("连接机器人成功");
+
 
                 /**
                  * WIFI机器人链接成功，跳转到登陆界面

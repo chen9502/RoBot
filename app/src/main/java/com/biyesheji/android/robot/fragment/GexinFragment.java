@@ -41,7 +41,7 @@ import java.util.Map;
  */
 
 public class GexinFragment extends Fragment implements View.OnClickListener, View.OnLongClickListener, AdapterView.OnItemLongClickListener, AdapterView.OnItemClickListener {
-    private Button btn_append,btn_del,btn_mode_gexin;
+    private Button btn_append,btn_del;
     private View view;
     private GridView gridView;
 
@@ -60,10 +60,10 @@ public class GexinFragment extends Fragment implements View.OnClickListener, Vie
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         view = inflater.inflate(R.layout.gexin_fragment, null);
 
         initView();
+        GsonList.gsonList("actioncontrol",255,"default","setting","mode_gexin");
         setListener();
         if(MyApp.gxdzList!=null){
 
@@ -102,14 +102,12 @@ public class GexinFragment extends Fragment implements View.OnClickListener, Vie
 
     private void setListener() {
         btn_append.setOnClickListener(this);
-        btn_mode_gexin.setOnClickListener(this);
     }
 
     private void initView() {
         btn_append = (Button) view.findViewById(R.id.btn_append);
         btn_del = (Button) view.findViewById(R.id.btn_del);
         gridView = (GridView) view.findViewById(R.id.gridView);
-        btn_mode_gexin = (Button) view.findViewById(R.id.btn_mode_gexin);
 
 
     }
@@ -201,7 +199,7 @@ public class GexinFragment extends Fragment implements View.OnClickListener, Vie
                         })
                         .create().show();
                 break;
-            case R.id.btn_mode_gexin:
+            /*case R.id.btn_mode_gexin:
                 GsonList.gsonList("actioncontrol",255,"default","setting","mode_gexin");
               //  ActionActivity.robotCurrentOprtionMode = ActionActivity.constRobotOptCustomizedMode;
                 if(ActionActivity.robotCurrentOprtionMode == 1){
@@ -210,7 +208,7 @@ public class GexinFragment extends Fragment implements View.OnClickListener, Vie
 //                    btn_mode_gexin.setBackgroundResource(R.drawable.wifiaploginpressfalse);
                 }
 
-                break;
+                break;*/
 
         }
     }
