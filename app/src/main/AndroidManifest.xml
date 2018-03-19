@@ -42,11 +42,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ui.LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
         <activity android:name=".ui.MainActivity"/>
         <activity android:name=".ui.BaseActivity"/>
@@ -57,7 +53,11 @@
         <activity android:name=".ui.FourKindActivity"/>
         <activity android:name=".ui.FiveKindActivity"/>
         <activity android:name=".ui.ConnectActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
 
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
         <activity android:name=".ui.ActionActivity"/>
     </application>
