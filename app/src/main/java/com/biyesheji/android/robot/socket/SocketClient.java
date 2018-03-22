@@ -8,10 +8,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.biyesheji.android.robot.MyApp;
+import com.biyesheji.android.robot.config.AppInfo;
 import com.biyesheji.android.robot.entity.AddButton;
 import com.biyesheji.android.robot.fragment.GexinFragment;
-import com.biyesheji.android.robot.fragment.SettingFragment;
-import com.biyesheji.android.robot.ui.ActionActivity;
 import com.biyesheji.android.robot.ui.ConnectActivity;
 
 import org.json.JSONArray;
@@ -27,8 +26,6 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import static com.biyesheji.android.robot.MyApp.client;
 
 /**
  * Created by Administrator on 2017/4/1 0001.
@@ -74,13 +71,13 @@ public class SocketClient {
                          *  connect()步骤
                          * */
                         //if (client == null || client.isClosed())
-                        if ((client != null)) {
-                            if (!client.isClosed()) {
-                                client.close();
+                        if ((MyApp.client != null)) {
+                            if (!MyApp.client.isClosed()) {
+                                MyApp.client.close();
                             }
                         }
                         Log.d("wxwx", "----Create Socket : Site is  " + site + "      Port is:" + port);
-                        client = new Socket(site, port);
+                        MyApp.client = new Socket(site, port);
                         // 发送数据包，默认为 false，即客户端发送数据采用 Nagle 算法；
                         // 但是对于实时交互性高的程序，建议其改为 true，即关闭 Nagle 算法，客户端每发送一次数据，无论数据包大小都会将这些数据发送出去
                        /* client.setTcpNoDelay(true);
@@ -89,11 +86,11 @@ public class SocketClient {
                         // 作用：每隔一段时间检查服务器是否处于活动状态，如果服务器端长时间没响应，自动关闭客户端socket
                         // 防止服务器端无效时，客户端长时间处于连接状态
                         client.setKeepAlive(true);*/
-                        if (client != null) {
-                            if(client.isConnected()){
+                        if (MyApp.client != null) {
+                            if(MyApp.client.isConnected()){
                                 intent = new Intent(ACTION_CONNECTION);
                                 intent.putExtra("socketclient", true);
-                                MyApp.getApp().getApplicationContext().sendBroadcast(intent);
+                                MyApp.getContextObject().sendBroadcast(intent);
                                 Log.d("wxwx", "----Socket connected successfully ---------------");
                             }
                             Log.d("wxwx", "----Create Socket obj successfully ---------------");
@@ -105,7 +102,7 @@ public class SocketClient {
                                 @Override
                                 public void run() {
 
-                                    if (client != null && client.isConnected()) {
+                                    if (MyApp.client != null && MyApp.client.isConnected()) {
                                         //Log.d("wxwx", "------打印测试---------");
                                         if(isWifiConncetionFailed == true) {
                                             WifiConncetionFailedCounter++;
@@ -120,10 +117,10 @@ public class SocketClient {
                                             Log.d("wxwx", "------未收到来自robot的Heartbeat包，断开socket连接---------");
                                             intent = new Intent(ACTION_SOCKETDISCONNETED);
                                             intent.putExtra("disconnected", true);
-                                            MyApp.getApp().getApplicationContext().sendBroadcast(intent);
+                                            MyApp.getContextObject().sendBroadcast(intent);
                                             try {
-                                                client.close();
-                                                client = null;
+                                                MyApp.client.close();
+                                                MyApp.client = null;
                                                 ConnectToServer.isRurning = false;
                                                 isClient = false;
                                                 br.close();
@@ -178,7 +175,7 @@ public class SocketClient {
     public void forOut() {
         try {
             //  out=new PrintWriter ( client.getOutputStream () );
-            out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(client.getOutputStream())));
+            out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(MyApp.client.getOutputStream())));
         } catch (IOException e) {
             e.printStackTrace();
             Log.d("wxwx", "8");
@@ -200,7 +197,7 @@ public class SocketClient {
         String optdata;
         try {
 
-            br = new BufferedReader(new InputStreamReader(client.getInputStream()));
+            br = new BufferedReader(new InputStreamReader(MyApp.client.getInputStream()));
             while (isClient) {
                 //  in=client.getInputStream ();
                 line = null;
@@ -225,23 +222,23 @@ public class SocketClient {
                                                 if ((i % 100) == 0)//每50条记录，打印一次结果
                                                 {
                                                     intent.putExtra("result", "指令执行成功");
-                                                    MyApp.getApp().getApplicationContext().sendBroadcast(intent);
+                                                    MyApp.getContextObject().sendBroadcast(intent);
                                                 }
                                             } else {
                                                 intent.putExtra("result", "指令执行成功");
-                                                MyApp.getApp().getApplicationContext().sendBroadcast(intent);
+                                                MyApp.getContextObject().sendBroadcast(intent);
                                             }
                                         }
 
                                         break;
                                     case "2": //执行失败
                                         intent.putExtra("result", "指令执行失败");
-                                        MyApp.getApp().getApplicationContext().sendBroadcast(intent);
+                                        MyApp.getContextObject().sendBroadcast(intent);
                                         bIsSuccessful = false;
                                         break;
                                     default: //缺省无效值
                                         intent.putExtra("result", "缺省无效值");
-                                        MyApp.getApp().getApplicationContext().sendBroadcast(intent);
+                                        MyApp.getContextObject().sendBroadcast(intent);
                                         break;
                                 }
                                 if (bIsSuccessful) {
@@ -253,7 +250,7 @@ public class SocketClient {
                                                 handler.post(new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        SettingFragment.yuyinkongzhiKG.setChecked(true);
+//                                                        SettingFragment.yuyinkongzhiKG.setChecked(true);
                                                     }
                                                 });
                                             }else
@@ -261,7 +258,7 @@ public class SocketClient {
                                                 handler.post(new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        SettingFragment.yuyinkongzhiKG.setChecked(false);
+//                                                        SettingFragment.yuyinkongzhiKG.setChecked(false);
                                                     }
                                                 });
                                             }
@@ -269,7 +266,7 @@ public class SocketClient {
                                                 handler.post(new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        SettingFragment.askanswerKG.setChecked(true);
+//                                                        SettingFragment.askanswerKG.setChecked(true);
                                                     }
                                                 });
                                             }else
@@ -277,7 +274,7 @@ public class SocketClient {
                                                 handler.post(new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        SettingFragment.askanswerKG.setChecked(false);
+//                                                        SettingFragment.askanswerKG.setChecked(false);
                                                     }
                                                 });
                                             }
@@ -290,8 +287,8 @@ public class SocketClient {
                                                     Log.d("wxwx","------socketclient-status oprateMode--para1-------------------"+moshi);
                                                     intent = new Intent(ACTION_ROBOT_OPERATEMODE_CHANGE);
                                                     intent.putExtra("robotoptmode", Integer.parseInt(moshi));
-                                                    ActionActivity.robotCurrentOprtionMode = Integer.parseInt(moshi); //将机器人运行模式记录到全局变量
-                                                    MyApp.getApp().getApplicationContext().sendBroadcast(intent);
+                                                    AppInfo.robotCurrentOprtionMode = Integer.parseInt(moshi); //将机器人运行模式记录到全局变量
+                                                    MyApp.getContextObject().sendBroadcast(intent);
                                                     break;
                                             }
                                             break;
@@ -323,7 +320,7 @@ public class SocketClient {
                                                     intent.putExtra("para3", resultanswer);
                                                     intent.putExtra("para4", opt);
                                                     intent.putExtra("para5", optresult);
-                                                    MyApp.getApp().getApplicationContext().sendBroadcast(intent);
+                                                    MyApp.getContextObject().sendBroadcast(intent);
                                                     Log.d("wxwx", "----------------" + intent.toString());
                                                     break;
                                                 case "2": //修改
@@ -338,7 +335,7 @@ public class SocketClient {
                                                     intent.putExtra("para3", resultanswer);
                                                     intent.putExtra("para4", opt);
                                                     intent.putExtra("para5", optresult);
-                                                    MyApp.getApp().getApplicationContext().sendBroadcast(intent);
+                                                    MyApp.getContextObject().sendBroadcast(intent);
                                                     break;
                                                 case "3": //删除
                                                     resultid = object.optInt("para1");
@@ -352,7 +349,7 @@ public class SocketClient {
                                                     intent.putExtra("para3", resultanswer);
                                                     intent.putExtra("para4", opt);
                                                     intent.putExtra("para5", optresult);
-                                                    MyApp.getApp().getApplicationContext().sendBroadcast(intent);
+                                                    MyApp.getContextObject().sendBroadcast(intent);
 
                                                     break;
                                                 case "4"://添加
@@ -367,7 +364,7 @@ public class SocketClient {
                                                     intent.putExtra("para3", resultanswer);
                                                     intent.putExtra("para4", opt);
                                                     intent.putExtra("para5", optresult);
-                                                    MyApp.getApp().getApplicationContext().sendBroadcast(intent);
+                                                    MyApp.getContextObject().sendBroadcast(intent);
                                                     break;
                                                 case "5":
                                                     break;
@@ -383,11 +380,11 @@ public class SocketClient {
                                             switch (optdata){
                                                 case "dakaiyuyinwenda":
                                                     intent.putExtra("yuyin","dakaiyuyinwenda");
-                                                    MyApp.getApp().getApplicationContext().sendBroadcast(intent);
+                                                    MyApp.getContextObject().sendBroadcast(intent);
                                                     break;
                                                 case "guanbiyuyinwenda":
                                                     intent.putExtra("yuyin","guanbiyuyinwenda");
-                                                    MyApp.getApp().getApplicationContext().sendBroadcast(intent);
+                                                    MyApp.getContextObject().sendBroadcast(intent);
                                                     break;
                                             }
                                             break;
@@ -396,11 +393,11 @@ public class SocketClient {
                                             switch (optdata){
                                             case "kaiqiyuyinkongzhi":
                                                 intent.putExtra("yuyin","kaiqiyuyinkongzhi");
-                                                MyApp.getApp().getApplicationContext().sendBroadcast(intent);
+                                                MyApp.getContextObject().sendBroadcast(intent);
                                                 break;
                                             case "guanbiyuyinkongzhi":
                                                 intent.putExtra("yuyin","guanbiyuyinkongzhi");
-                                                MyApp.getApp().getApplicationContext().sendBroadcast(intent);
+                                                MyApp.getContextObject().sendBroadcast(intent);
                                                 break;
                                         }
                                             break;
@@ -435,7 +432,7 @@ public class SocketClient {
 
                                                     Log.d("wxwx","=======gxdz===resultask========"+resultask);
                                                     Log.d("wxwx","=======gxdz===resultanswer========"+resultanswer);
-//                                                    Log.d("wxwx","-----socketclient----ActionActivity.gxdzList-------------"+ MyApplication.gxdzList.size());
+                                                    Log.d("wxwx","-----socketclient----ActionActivity.gxdzList-------------"+ MyApp.gxdzList.size());
                                                     break;
                                                 case "add":
                                                     intent.putExtra("gridview","refresh");
@@ -444,7 +441,7 @@ public class SocketClient {
                                                     GexinFragment.listGridview.add(addButtonadd);
                                                     Log.d("wxwx","=======socketclient===resultask  GexinFragment.listGridview.size  after Add========"+ GexinFragment.listGridview.size());
 
-                                                    MyApp.getApp().getApplicationContext().sendBroadcast(intent);
+                                                    MyApp.getContextObject().sendBroadcast(intent);
                                                     break;
                                                 case "delete":
                                                     intent.putExtra("gridview","refresh");
@@ -459,7 +456,7 @@ public class SocketClient {
                                                         GexinFragment.listGridview.remove(GexinFragment.itemlongclick_currentPosition);
                                                     }
 
-                                                    MyApp.getApp().getApplicationContext().sendBroadcast(intent);
+                                                    MyApp.getContextObject().sendBroadcast(intent);
 
                                                     break;
                                                 default:

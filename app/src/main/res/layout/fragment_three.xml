@@ -94,5 +94,25 @@
             android:textColor="#fff"
             />
     </LinearLayout>
-
+    <TextView
+        android:id="@+id/three_fragment_other"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="其他"
+        android:textColor="#000"
+        android:layout_margin="10dp"
+        android:layout_below="@+id/three_playLl"
+        />
+    <Button
+        android:id="@+id/three_fragment_qieHuan"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="20dp"
+        android:layout_below="@id/three_fragment_other"
+        android:layout_weight="1"
+        android:background="@drawable/anniu_btn"
+        android:text="切换模式"
+        android:textColor="#fff"
+        />
 </RelativeLayout>

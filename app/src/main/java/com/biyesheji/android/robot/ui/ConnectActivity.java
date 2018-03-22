@@ -1,5 +1,6 @@
 package com.biyesheji.android.robot.ui;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
@@ -10,8 +11,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
@@ -20,7 +21,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -44,7 +45,6 @@ import com.biyesheji.android.robot.socket.ConnectToServer;
 import com.biyesheji.android.robot.socket.GsonList;
 import com.biyesheji.android.robot.socket.SocketClient;
 import com.biyesheji.android.robot.utils.ClsUtils;
-import com.biyesheji.android.robot.utils.PermissionUtils;
 import com.biyesheji.android.robot.utils.WifiHotUtil;
 import com.biyesheji.android.robot.utils.WifiUtils;
 
@@ -61,23 +61,23 @@ import butterknife.Unbinder;
 
 public class ConnectActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener {
 
+
     // Debugging
     private static final String TAG = "wxwx";
     private static final boolean D = true;
-
-    // @Bind(R.id.btn_connectRobot)
-    // Button btnConnectRobot;
-
+    public static Button btn_connectRobot;
+    @BindView(R.id.rb_apmode)
+    Button rbApmode;
     @BindView(R.id.rb_wifimode)
     Button rbWifimode;
-    @BindView(R.id.btn_connectRobot)
-    Button btn_connectRobot;
+
 
     private int GPS_REQUEST_CODE = 10;
     private Intent intent = null;
     private WifiReceiver wifiReceiver;
     private static final String ACTION = "com.wifi";
 
+    private WifiHotUtil wifiHotUtil = new WifiHotUtil();
 
 
     private Timer checkWIfiApStateTimer = null;
@@ -104,76 +104,32 @@ public class ConnectActivity extends BaseActivity implements CompoundButton.OnCh
     private Unbinder unbind;
 
     @Override
-    public void onRequestPermissionsResult(final int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        PermissionUtils.requestPermissionsResult(this, requestCode, permissions, grantResults, mPermissionGrant);
-    }
-
-    private PermissionUtils.PermissionGrant mPermissionGrant = new PermissionUtils.PermissionGrant() {
-        @Override
-        public void onPermissionGranted(int requestCode) {
-            switch (requestCode) {
-                case PermissionUtils.CODE_RECORD_AUDIO:
-                    Toast.makeText(ConnectActivity.this, "Result Permission Grant CODE_RECORD_AUDIO", Toast.LENGTH_SHORT).show();
-                    break;
-                case PermissionUtils.CODE_GET_ACCOUNTS:
-                    Toast.makeText(ConnectActivity.this, "Result Permission Grant CODE_GET_ACCOUNTS", Toast.LENGTH_SHORT).show();
-                    break;
-                case PermissionUtils.CODE_READ_PHONE_STATE:
-                    Toast.makeText(ConnectActivity.this, "Result Permission Grant CODE_READ_PHONE_STATE", Toast.LENGTH_SHORT).show();
-                    break;
-                case PermissionUtils.CODE_CALL_PHONE:
-                    Toast.makeText(ConnectActivity.this, "Result Permission Grant CODE_CALL_PHONE", Toast.LENGTH_SHORT).show();
-                    break;
-                case PermissionUtils.CODE_CAMERA:
-                    Toast.makeText(ConnectActivity.this, "Result Permission Grant CODE_CAMERA", Toast.LENGTH_SHORT).show();
-                    break;
-                case PermissionUtils.CODE_ACCESS_FINE_LOCATION:
-                    Toast.makeText(ConnectActivity.this, "Result Permission Grant CODE_ACCESS_FINE_LOCATION", Toast.LENGTH_SHORT).show();
-                    break;
-                case PermissionUtils.CODE_ACCESS_COARSE_LOCATION:
-                    Toast.makeText(ConnectActivity.this, "Result Permission Grant CODE_ACCESS_COARSE_LOCATION", Toast.LENGTH_SHORT).show();
-                    break;
-                case PermissionUtils.CODE_READ_EXTERNAL_STORAGE:
-                    Toast.makeText(ConnectActivity.this, "Result Permission Grant CODE_READ_EXTERNAL_STORAGE", Toast.LENGTH_SHORT).show();
-                    break;
-                case PermissionUtils.CODE_WRITE_EXTERNAL_STORAGE:
-
-
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        /*if(Build.VERSION.SDK_INT>=23){
-            //开始请求权限
-            PermissionUtils.requestPermission(this,PermissionUtils.CODE_WRITE_EXTERNAL_STORAGE,mPermissionGrant);
-
-        }*/
-
         setContentView(R.layout.activity_connect);
+        unbind = ButterKnife.bind(this);
 
+        Log.d("wxwx", "------Mainactivity onCreate()----");
+        textstatus = (TextView) findViewById(R.id.textstatus);
+        textstatus2 = (TextView) findViewById(R.id.textstatus2);
+        btn_connectRobot = (Button) findViewById(R.id.btn_connectRobot);
 
-        mUtils = new WifiUtils(ConnectActivity.this);
-        result = mUtils.getScanWifiResult();
+        mUtils = new WifiUtils(this);
+        getWifiPermisson(); //wifi权限
+
 
         // Register for broadcasts when a device is discovered
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        ConnectActivity.this.registerReceiver(mReceiver, filter);
+        this.registerReceiver(mReceiver, filter);
 
         // Register for broadcasts when discovery has finished
         filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-        ConnectActivity.this.registerReceiver(mReceiver, filter);
+        this.registerReceiver(mReceiver, filter);
 
         filter = new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
-        ConnectActivity.this.registerReceiver(mReceiver, filter);
+        this.registerReceiver(mReceiver, filter);
 
-        IntentFilter intentFilter = new IntentFilter(AppInfo.ACTION_CONNECTACTIVITY);
+        IntentFilter intentFilter = new IntentFilter(AppInfo.ACTION_MAINACTIVITY);
         registerReceiver(broadcastReceiver, intentFilter);
 
         wifiReceiver = new WifiReceiver();
@@ -200,51 +156,39 @@ public class ConnectActivity extends BaseActivity implements CompoundButton.OnCh
                 }
             }
         }
-
-
-
-        Log.d("wxwx", "------ConnectActivity onCreate()----");
-
-        unbind = ButterKnife.bind(this);
-//        if(Build.VERSION.SDK_INT>=23){
-//            //开始请求权限
-//            getWifiPermisson();
-//
-//        }
-         //wifi权限
-
     }
 
-//    public void getWifiPermisson() {
-//        if (permission != PackageManager.PERMISSION_GRANTED) {
-//            Log.d("wxwx", "--------MyAsyncTask  申请wifi权限--------------------");
-//            // 没有写的权限，去申请写的权限，会弹出对话框
-//            ActivityCompat.requestPermissions(ConnectActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_WIFI_STATE}, 1);
-//            // ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.CAMERA},REQUEST_EXTERNAL_STORAGE);
-//        }
-//    }
+    public void getWifiPermisson() {
+        int permission = ActivityCompat.checkSelfPermission(MyApp.getContextObject(),
+                Manifest.permission_group.LOCATION);
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            Log.d("wxwx", "--------MyAsyncTask  申请wifi权限--------------------");
+            // 没有写的权限，去申请写的权限，会弹出对话框
+            ActivityCompat.requestPermissions(ConnectActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_WIFI_STATE}, 1);
+            // ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.CAMERA},REQUEST_EXTERNAL_STORAGE);
+        }
+    }
 
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, String[] permissions,
-//                                           int[] grantResults) {
-//        Log.d("wxwx", "--------onRequestPermissionsResult----requestCode----------------" + requestCode);
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        //result = mUtils.getScanWifiResult();
-//        switch (requestCode) {
-//            case 1:
-//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    // 允许
-//                    Log.d("wxwx", "--------onRequestPermissionsResult----Accepted----------------");
-//                    result = mUtils.getScanWifiResult();
-//                    Log.d("wxwx", "--------onRequestPermissionsResult----result----------------" + result);
-//                } else {
-//                    // 不允许
-//                    Log.d("wxwx", "--------onRequestPermissionsResult----Rejected----------------");
-//                }
-//                break;
-//        }
-//    }
-
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        Log.d("wxwx", "--------onRequestPermissionsResult----requestCode----------------" + requestCode);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        //result = mUtils.getScanWifiResult();
+        switch (requestCode) {
+            case 1:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // 允许
+                    Log.d("wxwx", "--------onRequestPermissionsResult----Accepted----------------");
+                    result = mUtils.getScanWifiResult();
+                    Log.d("wxwx", "--------onRequestPermissionsResult----result----------------" + result);
+                } else {
+                    // 不允许
+                    Log.d("wxwx", "--------onRequestPermissionsResult----Rejected----------------");
+                }
+                break;
+        }
+    }
 
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -314,7 +258,6 @@ public class ConnectActivity extends BaseActivity implements CompoundButton.OnCh
         }
     };
 
-
     /**
      * Start device discover with the BluetoothAdapter  开始发现设备
      */
@@ -355,7 +298,6 @@ public class ConnectActivity extends BaseActivity implements CompoundButton.OnCh
     @Override
     protected void onResume() {
         super.onResume();
-
         btn_connectRobot.setEnabled(false);
 
         Log.d("wxwx", "======Mainactivity onResume=============");
@@ -403,24 +345,29 @@ public class ConnectActivity extends BaseActivity implements CompoundButton.OnCh
         unregisterReceiver(wifiReceiver);
     }
 
-    private WifiHotUtil wifiHotUtil = new WifiHotUtil();
+
     private void showToast(String str) {
-        Toast toast = Toast.makeText(this, str, Toast.LENGTH_LONG);
+        Toast toast = Toast.makeText(ConnectActivity.this, str, Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
     }
+
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this)
                     .setTitle("提示")
-                    .setIcon(R.mipmap.ic_launcher)
                     .setMessage("您确定退出吗？")
                     .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             finish();
+                        }
+                    }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
                         }
                     });
             builder.create().show();
@@ -436,6 +383,24 @@ public class ConnectActivity extends BaseActivity implements CompoundButton.OnCh
             public void run() {
                 Log.d("wxwx", "-----------MainAcitivity WifiAPStateCheckTask run------------");
                 switch (AppInfo.isAPPinAPmode) {
+                    case "true":
+                        // 10---正在关闭；11---已关闭；12---正在开启；13---已开启
+                        switch (wifiHotUtil.getWifiApState()) {
+                            case 10:
+                                Log.d("wxwx", "-----------MainAcitivity creatNewWifiAPStateCheckTask 热点正在关闭------------");
+                                break;
+                            case 11:
+                                Log.d("wxwx", "-----------MainAcitivity creatNewWifiAPStateCheckTask 热点已关闭------------");
+                                break;
+                            case 12:
+                                Log.d("wxwx", "-----------MainAcitivity creatNewWifiAPStateCheckTask 热点正在开启------------");
+                                break;
+                            case 13:
+                                Log.d("wxwx", "-----------MainAcitivity creatNewWifiAPStateCheckTask 热点已开启------------");
+                                isConnected = true;
+                                break;
+                        }
+                        break;
                     case "false":
                         switch (wifiHotUtil.getWifiState()) {
                             case CONNECTING:
@@ -544,10 +509,10 @@ public class ConnectActivity extends BaseActivity implements CompoundButton.OnCh
     }
 
 
-    @OnClick({R.id.btn_connectRobot, R.id.rb_wifimode})
+    @OnClick({R.id.btn_connectRobot, R.id.rb_apmode, R.id.rb_wifimode})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-          /*  case R.id.rb_apmode:
+            case R.id.rb_apmode:
                 Log.d("wxwx", "------R.id.rb_apmode 是否打开热点 ---------------------" + wifiHotUtil.isWifiApEnabled());
 
                 if (!wifiHotUtil.isWifiApEnabled()) {
@@ -558,7 +523,7 @@ public class ConnectActivity extends BaseActivity implements CompoundButton.OnCh
                     btn_connectRobot.setEnabled(true);
                     btn_connectRobot.setBackgroundColor(Color.parseColor("#02CBFF"));
                     Log.d("wxwx", "-----------你选择了手机热点模式------------");
-                    MyApplication.isAPPinAPmode = "true";
+                    AppInfo.isAPPinAPmode = "true";
                     // showToast("请点击连接机器人");
                     Toast toast = Toast.makeText(this, "请点击连接机器人", Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER, 0, 0);
@@ -567,7 +532,7 @@ public class ConnectActivity extends BaseActivity implements CompoundButton.OnCh
                     showToast("请打开蓝牙,再连接机器人");
                     btn_connectRobot.setFocusable(true);
                     btn_connectRobot.setEnabled(false);
-                }*/
+                }
                /* if(mAdapter.isEnabled()) {
                     btn_connectRobot.setEnabled(true);
                     btn_connectRobot.setBackgroundColor(Color.parseColor("#02CBFF"));
@@ -580,7 +545,7 @@ public class ConnectActivity extends BaseActivity implements CompoundButton.OnCh
                 }else {
                     showToast("请打开蓝牙");
                 }*/
-//                break;
+                break;
             case R.id.rb_wifimode:
                 Log.d("wxwx", "-----------你选择了路由器模式------------");
                 if (!mUtils.isConnectWifi()) {
@@ -607,7 +572,7 @@ public class ConnectActivity extends BaseActivity implements CompoundButton.OnCh
                     String connnectWifiSsid = mUtils.getConnnectWifiSsid().replace("\"", "").replace("\"", "");
                     wifiname.setText(connnectWifiSsid);
                     AppInfo.ssid_wifi = connnectWifiSsid.toString();
-//                    Log.d("wxwx", "-----MyApplication.ssid_wifi---------------" + MyApplication.ssid_wifi.toString());
+                    Log.d("wxwx", "-----MyApplication.ssid_wifi---------------" + AppInfo.ssid_wifi.toString());
 
                     builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
@@ -639,6 +604,12 @@ public class ConnectActivity extends BaseActivity implements CompoundButton.OnCh
                     showToast("请输入WIFI密码");
                 }else {*/
                 switch (AppInfo.isAPPinAPmode) {
+                    case "true":
+                        Log.d(TAG, "-----------btn_connectRobot  本手机AP模式:---");
+                        //wifiHotUtil.startWifiAp(MyApplication.AP_SSID, MyApplication.AP_PWD);
+                        wifiHotUtil.turnOnWifiAp(AppInfo.AP_SSID, AppInfo.AP_PWD, WifiHotUtil.WifiSecurityType.WIFICIPHER_NOPASS);
+                        progress();
+                        break;
                     case "false":
                         progress();
 
@@ -670,6 +641,7 @@ public class ConnectActivity extends BaseActivity implements CompoundButton.OnCh
                             }).start();
                         }
                     }*/
+                        break;
                 }
                 //开始定时检测wifi链接检测状态
                 if (checkWifiApStateTask != null) {
@@ -692,7 +664,7 @@ public class ConnectActivity extends BaseActivity implements CompoundButton.OnCh
 
     public void progress() {
         //final ProgressDialog dlg = new ProgressDialog(MainActivity.this);
-        dialog = new ProgressDialog(this);
+        dialog = new ProgressDialog(ConnectActivity.this);
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);// 设置进度条的形式为圆形转动的进度条
         dialog.setCancelable(true);// 设置是否可以通过点击Back键取消
         dialog.setCanceledOnTouchOutside(false);// 设置在点击Dialog外是否取消Dialog进度条
@@ -732,8 +704,6 @@ public class ConnectActivity extends BaseActivity implements CompoundButton.OnCh
     }
 
 
-
-
     class MyAsyncTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -756,7 +726,7 @@ public class ConnectActivity extends BaseActivity implements CompoundButton.OnCh
             if (result_old == null) {
                 result_old = result;
                 Log.d("wxwx", "--------MyAsyncTask  onPostExecute SSID 初始化：列表有更新--------------------" + result_old.toString());
-                arrayAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_textview, result_old);
+                arrayAdapter = new ArrayAdapter<String>(MyApp.getContextObject(), R.layout.spinner_textview, result_old);
                 spinner.setAdapter(arrayAdapter);
                 // arrayAdapter.notifyDataSetChanged();
             } else {
@@ -765,7 +735,7 @@ public class ConnectActivity extends BaseActivity implements CompoundButton.OnCh
                 } else {
                     result_old = result;
                     Log.d("wxwx", "--------MyAsyncTask  onPostExecute SSID 非初始化：列表有更新--------------------" + result_old.toString());
-                    arrayAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_textview, result_old);
+                    arrayAdapter = new ArrayAdapter<String>(MyApp.getContextObject(), R.layout.spinner_textview, result_old);
                     spinner.setAdapter(arrayAdapter);
                     //   arrayAdapter.notifyDataSetChanged();
                 }
@@ -827,51 +797,6 @@ public class ConnectActivity extends BaseActivity implements CompoundButton.OnCh
         }
         //保证每次切换明文密文后光标都在最后面，默认是会切换到最前端
         edit_pwd.setSelection(edit_pwd.getText().length());
-    }
-
-    /**
-     * 检测GPS是否打开
-     *
-     * @return
-     */
-    private boolean checkGPSIsOpen(Context context) {
-        boolean isOpen;
-        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        isOpen = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        return isOpen;
-    }
-
-    /**
-     * 跳转GPS设置
-     */
-    private void openGPSSettings() {
-        {
-            //没有打开则弹出对话框
-            new AlertDialog.Builder(this)
-                    .setTitle("提示")
-                    .setMessage("当前应用需要打开定位功能。\\n\\n请点击\\\"设置\\\"-\\\"定位服务\\\"-打开定位功能")
-                    // 拒绝, 退出应用
-                    .setNegativeButton("取消",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // finish();
-                                }
-                            })
-
-                    .setPositiveButton("设置",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    //跳转GPS设置界面
-                                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                                    startActivityForResult(intent, GPS_REQUEST_CODE);
-                                }
-                            })
-
-                    .setCancelable(false)
-                    .show();
-        }
     }
 }
 

@@ -1,14 +1,20 @@
 package com.biyesheji.android.robot.fragment;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.biyesheji.android.robot.R;
+import com.biyesheji.android.robot.config.AppInfo;
 import com.biyesheji.android.robot.socket.GsonList;
 
 import butterknife.BindView;
@@ -60,7 +66,8 @@ public class TwoFragment extends BaseFragment {
     Button fragmentTwoQianShouGuanYin;
     @BindView(R.id.fragment_two_jieWu)
     Button fragmentTwoJieWu;
-
+    @BindView(R.id.fragment_two_other)
+    Button fragmentTwoOther;
     Unbinder unbinder;
 
     public TwoFragment() {
@@ -73,19 +80,27 @@ public class TwoFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View inflate = inflater.inflate(R.layout.fragment_two, container, false);
-
+        IntentFilter intentFiltergexin = new IntentFilter(AppInfo.ACTION_ROBOT_OPERATEMODE_CHANGE);
+        getActivity().registerReceiver(broadcastReceiverbiaozhun,intentFiltergexin);
 
         unbinder = ButterKnife.bind(this, inflate);
         return inflate;
     }
-
+    BroadcastReceiver broadcastReceiverbiaozhun = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int robotoptmode = intent.getIntExtra("robotoptmode", 0);
+            Log.d("wxwx","-----------SettingFragment  robotoptmode-------------"+robotoptmode);
+        }
+    };
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        getActivity().unregisterReceiver(broadcastReceiverbiaozhun);
         unbinder.unbind();
     }
 
-    @OnClick({R.id.fragment_two_zuoZhuan, R.id.fragment_two_qianJing, R.id.fragment_two_houTui, R.id.fragment_two_youZhuan, R.id.fragment_two_qianFangun, R.id.fragment_two_houFanGun, R.id.fragment_two_qianPa, R.id.fragment_two_houPa, R.id.fragment_two_fuWoCheng, R.id.fragment_two_yangWoQiZuo, R.id.fragment_two_zuoPingYi, R.id.fragment_two_youPingYi, R.id.fragment_two_zuoTiTui, R.id.fragment_two_youTiTui, R.id.fragment_two_zuoJinLi, R.id.fragment_two_youJinLi, R.id.fragment_two_qiaoXiYang, R.id.fragment_two_qianShouGuanYin, R.id.fragment_two_jieWu})
+    @OnClick({R.id.fragment_two_other,R.id.fragment_two_zuoZhuan, R.id.fragment_two_qianJing, R.id.fragment_two_houTui, R.id.fragment_two_youZhuan, R.id.fragment_two_qianFangun, R.id.fragment_two_houFanGun, R.id.fragment_two_qianPa, R.id.fragment_two_houPa, R.id.fragment_two_fuWoCheng, R.id.fragment_two_yangWoQiZuo, R.id.fragment_two_zuoPingYi, R.id.fragment_two_youPingYi, R.id.fragment_two_zuoTiTui, R.id.fragment_two_youTiTui, R.id.fragment_two_zuoJinLi, R.id.fragment_two_youJinLi, R.id.fragment_two_qiaoXiYang, R.id.fragment_two_qianShouGuanYin, R.id.fragment_two_jieWu})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.fragment_two_zuoZhuan:
@@ -144,6 +159,11 @@ public class TwoFragment extends BaseFragment {
                 break;
             case R.id.fragment_two_jieWu:
                 GsonList.gsonList("actioncontrol",255,"default","biaozhun","jiewu");
+                break;
+            case R.id.fragment_two_other:
+                GsonList.gsonList("actioncontrol",255,"default","setting","mode_biaozhun");
+                // ActionActivity.robotCurrentOprtionMode = ActionActivity.constRobotOptStandardMode;
+
                 break;
 
         }

@@ -23,6 +23,8 @@ public class FourKindActivity extends BaseActivity {
     Button fragmentTwoHouTui;
     @BindView(R.id.fragment_two_youZhuan)
     Button fragmentTwoYouZhuan;
+    @BindView(R.id.fragment_two_other)
+    Button other;
     private TextView yuandiTv;
     private LinearLayout yuandiOneLl;
     private LinearLayout yuandiTwoLl;
@@ -53,6 +55,7 @@ public class FourKindActivity extends BaseActivity {
         wudaoTv.setVisibility(View.GONE);
         wudaoLl.setVisibility(View.GONE);
         otherTv.setVisibility(View.GONE);
+        other.setVisibility(View.GONE);
     }
 
     private void initView() {

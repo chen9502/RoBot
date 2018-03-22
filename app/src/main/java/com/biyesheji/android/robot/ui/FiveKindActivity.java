@@ -21,6 +21,8 @@ public class FiveKindActivity extends BaseActivity {
     Button fragmentTwoQianShouGuanYin;
     @BindView(R.id.fragment_two_jieWu)
     Button fragmentTwoJieWu;
+    @BindView(R.id.fragment_two_other)
+    Button fragmentTwoOther;
     private TextView xingjinTv;
     private LinearLayout xingjinLl;
     private TextView yuandiTv;
@@ -51,6 +53,7 @@ public class FiveKindActivity extends BaseActivity {
         zhitiTv.setVisibility(View.GONE);
         zhitiLl.setVisibility(View.GONE);
         otherTv.setVisibility(View.GONE);
+        fragmentTwoOther.setVisibility(View.GONE);
     }
 
     private void initView() {

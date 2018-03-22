@@ -109,7 +109,26 @@
         android:text="倒立"
         android:textColor="#fff"
         />
-
-
+    <TextView
+        android:id="@+id/one_fragment_other"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/one_daoliBtn"
+        android:text="其他"
+        android:layout_margin="20dp"
+        android:textColor="#000"
+        />
+    <Button
+        android:id="@+id/one_qieHuanMoShi"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/one_fragment_other"
+        android:background="@drawable/anniu_btn"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="20dp"
+        android:text="模式切换"
+        android:textColor="#fff"
+        />
 
 </RelativeLayout>

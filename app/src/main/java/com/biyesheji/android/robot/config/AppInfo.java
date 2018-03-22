@@ -28,4 +28,8 @@ public class AppInfo {
     public static String isAPPinAPmode = "false";
     public static final String AP_SSID = "weiwei";
     public static final String AP_PWD = "1234567890";
+    public static int robotCurrentOprtionMode = 0;
+    public static  final int  constRobotOptStandardMode= 0;  //0:默认为标准动作模式
+    public static  final int  constRobotOptCustomizedMode= 1;  //1：个性动作模式
+    public static final int  constRobotOptOnlineProgramMode= 2;  //2：图形化编程模式
 }

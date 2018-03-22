@@ -1,14 +1,20 @@
 package com.biyesheji.android.robot.fragment;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.biyesheji.android.robot.R;
+import com.biyesheji.android.robot.config.AppInfo;
 import com.biyesheji.android.robot.socket.GsonList;
 
 import butterknife.BindView;
@@ -32,8 +38,11 @@ public class ThreeFragment extends BaseFragment {
     Button fragmentThreeZanTingVic;
     @BindView(R.id.fragment_three_guanBiVic)
     Button fragmentThreeGuanBiVic;
-    Unbinder unbinder;
+    @BindView(R.id.three_fragment_qieHuan)
+    Button fragmentQieHuan;
 
+    Unbinder unbinder;
+    private IntentFilter intentFilter;
     public ThreeFragment() {
         // Required empty public constructor
     }
@@ -44,17 +53,31 @@ public class ThreeFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_three, container, false);
+        GsonList.gsonList("yuyinzhuantaichaxun",255,"default","default","default");
+
+
+        intentFilter = new IntentFilter(AppInfo.ACTION_ROBOT_OPERATEMODE_CHANGE);
+        getActivity().registerReceiver(broadcastReceiver, intentFilter);
+
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int robotoptmode = intent.getIntExtra("robotoptmode", 0);
+            Log.d("wxwx","-----------SettingFragment  robotoptmode-------------"+robotoptmode);
+        }
+    };
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        getActivity().unregisterReceiver(broadcastReceiver);
         unbinder.unbind();
     }
 
-    @OnClick({R.id.fragment_three_zengDaVic, R.id.fragment_three_jianXiaoVic, R.id.fragment_three_kaiQiVic, R.id.fragment_three_zanTingVic, R.id.fragment_three_guanBiVic})
+    @OnClick({R.id.three_fragment_qieHuan,R.id.fragment_three_zengDaVic, R.id.fragment_three_jianXiaoVic, R.id.fragment_three_kaiQiVic, R.id.fragment_three_zanTingVic, R.id.fragment_three_guanBiVic})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.fragment_three_zengDaVic:
@@ -72,6 +95,8 @@ public class ThreeFragment extends BaseFragment {
             case R.id.fragment_three_guanBiVic:
                 GsonList.gsonList("actioncontrol",255,"default","setting","voicecmdguan");
                 break;
+            case R.id.three_fragment_qieHuan:
+                GsonList.gsonList("actioncontrol",255,"default","setting","mode_programe");
         }
     }
 }

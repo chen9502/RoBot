@@ -29,7 +29,6 @@ import com.biyesheji.android.robot.R;
 import com.biyesheji.android.robot.config.AppInfo;
 import com.biyesheji.android.robot.entity.AddButton;
 import com.biyesheji.android.robot.socket.GsonList;
-import com.biyesheji.android.robot.ui.ActionActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +40,7 @@ import java.util.Map;
  */
 
 public class GexinFragment extends Fragment implements View.OnClickListener, View.OnLongClickListener, AdapterView.OnItemLongClickListener, AdapterView.OnItemClickListener {
-    private Button btn_append,btn_del;
+    private Button btn_append,btn_del,btn_mode_gexin;
     private View view;
     private GridView gridView;
 
@@ -60,10 +59,10 @@ public class GexinFragment extends Fragment implements View.OnClickListener, Vie
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         view = inflater.inflate(R.layout.gexin_fragment, null);
 
         initView();
-        GsonList.gsonList("actioncontrol",255,"default","setting","mode_gexin");
         setListener();
         if(MyApp.gxdzList!=null){
 
@@ -79,11 +78,11 @@ public class GexinFragment extends Fragment implements View.OnClickListener, Vie
         getActivity().registerReceiver(broadcastReceiver,intentFilter);
         IntentFilter intentFiltergexin = new IntentFilter(AppInfo.ACTION_ROBOT_OPERATEMODE_CHANGE);
         getActivity().registerReceiver(broadcastReceivergexin,intentFiltergexin);
-        if(ActionActivity.robotCurrentOprtionMode ==  ActionActivity.constRobotOptCustomizedMode){
-//            btn_mode_gexin.setBackgroundResource(R.drawable.wifiaploginpress);
+        /*if(AppInfo.robotCurrentOprtionMode ==  AppInfo.constRobotOptCustomizedMode){
+            btn_mode_gexin.setBackgroundResource(R.drawable.wifiaploginpress);
         }else {
-//            btn_mode_gexin.setBackgroundResource(R.drawable.wifiaploginpressfalse);
-        }
+            btn_mode_gexin.setBackgroundResource(R.drawable.wifiaploginpressfalse);
+        }*/
 
         return view;
     }
@@ -92,22 +91,24 @@ public class GexinFragment extends Fragment implements View.OnClickListener, Vie
         public void onReceive(Context context, Intent intent) {
             int robotoptmode = intent.getIntExtra("robotoptmode", 0);
             Log.d("wxwx","-----------SettingFragment  robotoptmode-------------"+robotoptmode);
-            if(robotoptmode == ActionActivity.constRobotOptCustomizedMode){
-//                btn_mode_gexin.setBackgroundResource(R.drawable.wifiaploginpress);
+            /*if(robotoptmode == AppInfo.constRobotOptCustomizedMode){
+                btn_mode_gexin.setBackgroundResource(R.drawable.wifiaploginpress);
             }else {
-//                btn_mode_gexin.setBackgroundResource(R.drawable.wifiaploginpressfalse);
-            }
+                btn_mode_gexin.setBackgroundResource(R.drawable.wifiaploginpressfalse);
+            }*/
         }
     };
 
     private void setListener() {
         btn_append.setOnClickListener(this);
+        btn_mode_gexin.setOnClickListener(this);
     }
 
     private void initView() {
         btn_append = (Button) view.findViewById(R.id.btn_append);
         btn_del = (Button) view.findViewById(R.id.btn_del);
         gridView = (GridView) view.findViewById(R.id.gridView);
+        btn_mode_gexin = (Button) view.findViewById(R.id.btn_mode_gexin);
 
 
     }
@@ -199,16 +200,16 @@ public class GexinFragment extends Fragment implements View.OnClickListener, Vie
                         })
                         .create().show();
                 break;
-            /*case R.id.btn_mode_gexin:
+            case R.id.btn_mode_gexin:
                 GsonList.gsonList("actioncontrol",255,"default","setting","mode_gexin");
               //  ActionActivity.robotCurrentOprtionMode = ActionActivity.constRobotOptCustomizedMode;
-                if(ActionActivity.robotCurrentOprtionMode == 1){
+                if(AppInfo.robotCurrentOprtionMode == 1){
 
                 }else {
 //                    btn_mode_gexin.setBackgroundResource(R.drawable.wifiaploginpressfalse);
                 }
 
-                break;*/
+                break;
 
         }
     }
@@ -216,7 +217,7 @@ public class GexinFragment extends Fragment implements View.OnClickListener, Vie
     public void gridviewRefresh(){
         Log.d("wxwx", "---------gridviewRefresh:listGridview.size() ------------------"+listGridview.size());
        // if(listGridview.size()!=0) {
-        MyApp.gxdzList.clear();
+            MyApp.gxdzList.clear();
             Object[] objects = listGridview.toArray();
 
             Log.d("wxwx", "---------Object[]length ------------------" + objects.length);
@@ -236,7 +237,7 @@ public class GexinFragment extends Fragment implements View.OnClickListener, Vie
                 MyApp.gxdzList.add(MyApp.gxdzMap);
             }
            // Log.d("wxwx","--gridviewRefresh-----MyApplication.gxdzList-------"+MyApplication.gxdzList.get(0));
-            simpleAdapter = new SimpleAdapter(MyApp.getApp().getApplicationContext(), MyApp.gxdzList, R.layout.gridview_add,
+            simpleAdapter = new SimpleAdapter(MyApp.getContextObject(), MyApp.gxdzList, R.layout.gridview_add,
                     new String[]{"databaseid", "mingcheng", "bianhao"}, new int[]{R.id.databaseid, R.id.gridViewBtn, R.id.bianhao});
             gridView.setAdapter(simpleAdapter);
        // }
@@ -321,7 +322,7 @@ public class GexinFragment extends Fragment implements View.OnClickListener, Vie
                 btntext.setBackgroundResource(R.drawable.btnpress1);
             }else {
               //  btntext.setBackgroundResource(R.drawable.btndisable);
-//                btntext.setBackgroundResource(R.drawable.wifiaplogin1);
+                btntext.setBackgroundResource(R.drawable.wifiaplogin1);
                 btntext.setEnabled(false);
             }
         }

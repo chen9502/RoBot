@@ -2,5 +2,4 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <solid android:color="#4682B4" /><!-- 背景填充颜色 -->
     <!--<stroke android:width="3dp" android:color="#DCDCDC" />&lt;!&ndash; 描边，边框宽度、颜色 &ndash;&gt;-->
-    <corners android:radius="5dp" /><!-- 边角圆弧的半径 -->
 </shape>

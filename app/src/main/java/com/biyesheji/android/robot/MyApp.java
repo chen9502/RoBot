@@ -1,6 +1,7 @@
 package com.biyesheji.android.robot;
 
 import android.app.Application;
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -37,7 +38,9 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static android.content.ContentValues.TAG;
+import static com.biyesheji.android.robot.config.AppInfo.ACTION_MAINACTIVITY;
+import static com.biyesheji.android.robot.config.AppInfo.AP_PWD;
+import static com.biyesheji.android.robot.config.AppInfo.AP_SSID;
 import static com.biyesheji.android.robot.config.AppInfo.MESSAGE_CONNECTION_LOST;
 import static com.biyesheji.android.robot.config.AppInfo.MESSAGE_CONNECT_FAILED;
 import static com.biyesheji.android.robot.config.AppInfo.MESSAGE_DEVICE_NAME;
@@ -46,6 +49,7 @@ import static com.biyesheji.android.robot.config.AppInfo.MESSAGE_STATE_CHANGE;
 import static com.biyesheji.android.robot.config.AppInfo.MESSAGE_SWITCHTO_MAINACTIVITY;
 import static com.biyesheji.android.robot.config.AppInfo.MESSAGE_TOAST;
 import static com.biyesheji.android.robot.config.AppInfo.MESSAGE_WRITE;
+import static com.biyesheji.android.robot.config.AppInfo.PORT;
 import static com.biyesheji.android.robot.config.AppInfo.isCompleteRecvMsg;
 import static com.biyesheji.android.robot.config.AppInfo.pwd_wifi;
 import static com.biyesheji.android.robot.config.AppInfo.ssid_wifi;
@@ -56,13 +60,30 @@ import static com.biyesheji.android.robot.config.AppInfo.ssid_wifi;
 
 public class MyApp extends Application{
     private static MyApp app;
-    public static BluetoothDevice robotBTdevice = null;
-    public static BluetoothChatService mChatService;
-    private static final boolean D = true;
-    public static Socket client;
+    public static Context context;
+    public static Context getContextObject() {
+        return context;
+    }
     public static List<Map<String, Object>> gxdzList = new ArrayList<>();
     public static Map<String, Object> gxdzMap;
+
+    //蓝牙
+    public static BluetoothChatService mChatService;
+    // Debugging
+    private static final String TAG = "wxwx";
+    private static final boolean D = true;
+    private JSONArray jsonArray;
     private String type;
+    private Message msg = Message.obtain();
+    private Intent intent;
+    public static BluetoothDevice robotBTdevice = null;
+    public static Handler MyAppHandler;
+    public static Socket client;
+    public static boolean isFirstToMainactivity = true;
+    private boolean isNeedToReConnectToRobot = false;
+    public static boolean isNormalBackToMainActivity = false;
+    private int reConnectTorobotCounter = 0;
+    private Timer reConnectTorobotTimer = null;
     public final int getReConnectTorobotTryTimes = 15;
     public static MyApp getApp() {
         return app;
@@ -70,23 +91,42 @@ public class MyApp extends Application{
 
     @Override
     public void onCreate() {
+        
+        
         super.onCreate();
         this.app = this;
         initDButils();
         sharep();
+        initbluetooth();
+
+    }
+
+    private void initbluetooth() {
         mChatService = new BluetoothChatService(this, mHandler);
-        myapplicationHandler = new Handler(){
+
+        context = getApplicationContext();
+
+        IntentFilter filter =  new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+        registerReceiver(BluetoothStatusReceiver, filter);
+        filter = new IntentFilter(BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED);
+        registerReceiver(BluetoothStatusReceiver, filter);
+
+        filter = new IntentFilter(BluetoothDevice.ACTION_ACL_CONNECTED);
+        registerReceiver(BluetoothStatusReceiver, filter);
+        filter = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
+        registerReceiver(BluetoothStatusReceiver, filter);
+
+        MyAppHandler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-
                 String strIp = msg.obj.toString();
                 int msgType = msg.arg1;
                 switch (msgType){
                     case 1: //连接到机器人
                         //关闭已有的socket线程
                         if ((MyApp.client != null)) {
-                            if (!MyApp.client.isClosed()) {
+                            if (MyApp.client.isClosed()) {
                                 try {
                                     MyApp.client.close();
                                 } catch (IOException e) {
@@ -95,57 +135,17 @@ public class MyApp extends Application{
                             }
                         }
 
-
                         ConnectToServer.isRurning = false;
                         SystemClock.sleep(500);
                         ConnectToServer.isRurning = true;
-                        ConnectToServer.connectServer(strIp,AppInfo.PORT);
+                        ConnectToServer.connectServer(strIp,PORT);
                         break;
                 }
 
             }
         };
     }
-
-    private void sharep() {
-        SharedPreferences setting = getSharedPreferences("setting", MODE_PRIVATE);
-        boolean first = setting.getBoolean("first", true);
-        if (first){
-            //创建数据库并加入数据
-            UserAccount account1 = new UserAccount("Admin","123456","1");
-            UserAccount account2 = new UserAccount("teacher1","123456","2");
-            UserAccount account3 = new UserAccount("teacher2","123456","3");
-            UserAccount account4 = new UserAccount("student1","123456","4");
-            UserAccount account5 = new UserAccount("student2","123456","5");
-            DbManager db = x.getDb(daoConfig);
-
-            try {
-                db.saveOrUpdate(account1);
-                db.saveOrUpdate(account2);
-                db.saveOrUpdate(account3);
-                db.saveOrUpdate(account4);
-                db.saveOrUpdate(account5);
-            } catch (DbException e) {
-                e.printStackTrace();
-            }
-
-
-            setting.edit().putBoolean("first",false).commit();
-        }
-    }
-
-    public DbManager.DaoConfig getDaoConfig() {
-        return daoConfig;
-    }
-    private DbManager.DaoConfig daoConfig;
-    private void initDButils() {
-        x.Ext.init(this);//Xutils初始化
-        daoConfig= new DbManager.DaoConfig()
-                .setDbName("robot")//创建数据库的名称
-                .setDbVersion(1)//数据库版本号
-               ;//数据库更新操作
-    }
-
+    // The Handler that gets information back from the BluetoothChatService
     public final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -156,15 +156,15 @@ public class MyApp extends Application{
                     if(D) Log.d("wxwx", "BT MESSAGE_STATE_CHANGE: " + msg.arg1);
                     switch (msg.arg1) {
                         case BluetoothChatService.STATE_CONNECTED:
-//                            switch (AppInfo.isAPPinAPmode) {
-//                                case "true":
-//                                    GsonList.gsonListViaBT("apstation",255,AP_SSID,AP_PWD,"default");
-//                                    // GsonList.gsonListViaBT("apstation",255,"gfdtek2G","gfd@xian2","default");
-//                                    break;
-//                                case "false":
+                            switch (AppInfo.isAPPinAPmode) {
+                                case "true":
+                                    GsonList.gsonListViaBT("apstation",255,AP_SSID,AP_PWD,"default");
+                                    // GsonList.gsonListViaBT("apstation",255,"gfdtek2G","gfd@xian2","default");
+                                    break;
+                                case "false":
                                     GsonList.gsonListViaBT("router",255,ssid_wifi,pwd_wifi,"default");
-//                                    break;
-//                            }
+                                    break;
+                            }
                             if(reConnectTorobotTimer!=null) {
                                 reConnectTorobotTimer.cancel();
                                 reConnectTorobotTimer.purge();
@@ -197,7 +197,7 @@ public class MyApp extends Application{
                                                     reConnectTorobotCounter = 0;
 
                                            /*         Message msg = new Message();
-                                                    msg.what = MyApplication.MESSAGE_SWITCHTO_MAINACTIVITY;
+                                                    msg.what = MyApp.MESSAGE_SWITCHTO_MAINACTIVITY;
                                                     mHandler.sendMessage(msg);*/
                                                 }
                                             }
@@ -260,7 +260,7 @@ public class MyApp extends Application{
                                         reConnectTorobotCounter = 0;
 
                           /*              Message msg = new Message();
-                                        msg.what = MyApplication.MESSAGE_SWITCHTO_MAINACTIVITY;
+                                        msg.what = MyApp.MESSAGE_SWITCHTO_MAINACTIVITY;
                                         mHandler.sendMessage(msg);*/
                                     }
                                 }
@@ -308,7 +308,7 @@ public class MyApp extends Application{
                                         reConnectTorobotTimertask = null;
                                         reConnectTorobotCounter = 0;
                                   /*      Message msg = new Message();
-                                        msg.what = MyApplication.MESSAGE_SWITCHTO_MAINACTIVITY;
+                                        msg.what = MyApp.MESSAGE_SWITCHTO_MAINACTIVITY;
                                         mHandler.sendMessage(msg);*/
                                     }
                                 }
@@ -325,7 +325,7 @@ public class MyApp extends Application{
                                 reConnectTorobotCounter = 0;
 
                   /*              Message msg = new Message();
-                                msg.what = MyApplication.MESSAGE_SWITCHTO_MAINACTIVITY;
+                                msg.what = MyApp.MESSAGE_SWITCHTO_MAINACTIVITY;
                                 mHandler.sendMessage(msg);*/
                             }
 
@@ -388,14 +388,14 @@ public class MyApp extends Application{
                                 Log.d("wxwx", "======jsonArray==type===========" + type);
                                 ip = object.optString("para2");
                                 Log.d("wxwx", "======jsonArray==ip===========" + ip);
-                                intent = new Intent(AppInfo.ACTION_MAINACTIVITY);
+                                intent = new Intent(ACTION_MAINACTIVITY);
                                 switch (type){
                                     case "serviceIP":
                                         GsonList.gsonListViaBT("ServiceIPResp",255,"default","default","default");
                                         Message message = Message.obtain();
                                         message.obj = ip;
                                         message.arg1 = 1;   //连接到机器人类型
-                                        MyApp.myapplicationHandler.sendMessage(message);
+                                        MyApp.MyAppHandler.sendMessage(message);
                                         IntentFilter intentFilter = new IntentFilter(SocketClient.ACTION_CONNECTION);
                                         registerReceiver(broadcastReceiver1,intentFilter);
                                         break;
@@ -406,7 +406,6 @@ public class MyApp extends Application{
                                             @Override
                                             public void run() {
                                                 //   MainActivity.textstatus.setText("维维连接wifi失败");
-
                                             }
                                         });
                                         break;
@@ -428,39 +427,6 @@ public class MyApp extends Application{
             }
         }
     };
-    private void showToast(String str) {
-        Toast toast = Toast.makeText(this, str, Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
-    }
-    BroadcastReceiver broadcastReceiver1 = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            boolean socketclient = intent.getBooleanExtra("socketclient", true);
-            if(socketclient == true){
-                Log.d("wxwx","------broadcastReceiver1  连接到维维---------------");
-                showToast("连接机器人成功");
-
-
-                /**
-                 * WIFI机器人链接成功，跳转到登陆界面
-                 */
-                intent = new Intent(MyApp.this,LoginActivity.class);
-                Log.d("wxwx","------broadcastReceiver1  连接到维维  intent---------------"+intent);
-                startActivity(intent);
-            }else {
-                showToast("连接机器人失败");
-                ConnectActivity.dialog.dismiss();
-                ConnectActivity.dialog.cancel();
-            }
-
-        }
-    };
-    public static boolean isFirstToMainactivity = true;
-    private boolean isNeedToReConnectToRobot = false;
-    public static boolean isNormalBackToMainActivity = false;
-    private int reConnectTorobotCounter = 0;
-    private Timer reConnectTorobotTimer = null;
     private TimerTask reConnectTorobotTimertask = new TimerTask() {
         @Override
         public void run() {
@@ -484,7 +450,7 @@ public class MyApp extends Application{
                         reConnectTorobotCounter = 0;
 /*
                         Message msg = new Message();
-                        msg.what = MyApplication.MESSAGE_SWITCHTO_MAINACTIVITY;
+                        msg.what = MyApp.MESSAGE_SWITCHTO_MAINACTIVITY;
                         mHandler.sendMessage(msg);*/
                     }
                 }
@@ -501,14 +467,147 @@ public class MyApp extends Application{
                 reConnectTorobotCounter = 0;
 
                /* Message msg = new Message();
-                msg.what = MyApplication.MESSAGE_SWITCHTO_MAINACTIVITY;
+                msg.what = MyApp.MESSAGE_SWITCHTO_MAINACTIVITY;
                 mHandler.sendMessage(msg);*/
             }
 
         }
-
     };
-    private JSONArray jsonArray;
-    private Intent intent;
-    public static Handler myapplicationHandler;
+
+    BroadcastReceiver broadcastReceiver1 = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            boolean socketclient = intent.getBooleanExtra("socketclient", true);
+            if(socketclient == true){
+                Log.d("wxwx","------broadcastReceiver1  连接到维维---------------");
+                showToast("连接机器人成功");
+                intent = new Intent(MyApp.this,LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                Log.d("wxwx","------broadcastReceiver1  连接到维维  intent---------------"+intent);
+                startActivity(intent);
+            }else {
+                showToast("连接机器人失败");
+                ConnectActivity.dialog.dismiss();
+                ConnectActivity.dialog.cancel();
+            }
+
+        }
+    };
+
+
+    private final BroadcastReceiver BluetoothStatusReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+
+            switch (action){
+                case BluetoothAdapter.ACTION_STATE_CHANGED:
+                    final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE,
+                            BluetoothAdapter.ERROR);
+                    switch (state) {
+                        case BluetoothAdapter.STATE_OFF:
+
+                            break;
+                        case BluetoothAdapter.STATE_TURNING_OFF:
+                            if(D) Log.d(TAG, "---------------BluetotthStatusReceiver  BluetoothAdapter.STATE_TURNING_OFF  mChatService.stop()-------------------");
+
+                            break;
+                        case BluetoothAdapter.STATE_ON:
+                            if(D) Log.d(TAG, "--------------BluetotthStatusReceiver  BluetoothAdapter.STATE_ON-------------------");
+
+                            break;
+                        case BluetoothAdapter.STATE_TURNING_ON:
+                            if(D) Log.d(TAG, "---------------BluetotthStatusReceiver  STATE_TURNING_ON-----------------");
+                            break;
+                    }
+                    break;
+                case BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED:
+                    final int stateConnect = intent.getIntExtra(BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED,BluetoothAdapter.ERROR);
+                    switch (stateConnect){
+                        case BluetoothAdapter.STATE_DISCONNECTED:
+                            if(D) Log.d(TAG, "---------------BluetotthStatusReceiver  STATE_DISCONNECTED-----------------");
+                            break;
+                        case BluetoothAdapter.STATE_CONNECTING:
+                            if(D) Log.d(TAG, "---------------BluetotthStatusReceiver  STATE_CONNECTING-----------------");
+                            break;
+                        case BluetoothAdapter.STATE_CONNECTED:
+                            if(D) Log.d(TAG, "---------------BluetotthStatusReceiver  STATE_CONNECTED-----------------");
+                            break;
+                        case BluetoothAdapter.STATE_DISCONNECTING:
+                            if(D) Log.d(TAG, "---------------BluetotthStatusReceiver  STATE_DISCONNECTING-----------------");
+                            break;
+                        default:
+                            if(D) Log.d(TAG, "---------------BluetotthStatusReceiver default:stateConnect-----------------"+stateConnect);
+                            break;
+                    }
+
+                    break;
+                case BluetoothDevice.ACTION_ACL_CONNECTED:
+                    if(D) Log.d(TAG, "---------------BluetotthStatusReceiver  BluetoothDevice.ACTION_ACL_CONNECTED-----------------");
+
+                    break;
+                case BluetoothDevice.ACTION_ACL_DISCONNECTED:
+                    if(D) Log.d(TAG, "---------------MyApp BluetoothDevice.ACTION_ACL_DISCONNECTED-----------------");
+                    Message msg = mHandler.obtainMessage(AppInfo.MESSAGE_CONNECTION_LOST);
+                    mHandler.sendMessage(msg);
+                    break;
+            }
+        }
+    };
+
+    private void showToast(String str) {
+        Toast toast = Toast.makeText(this, str, Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    private void sharep() {
+        SharedPreferences setting = getSharedPreferences("setting", MODE_PRIVATE);
+        boolean first = setting.getBoolean("first", true);
+        if (first){
+            //创建数据库并加入数据
+            UserAccount account1 = new UserAccount("Admin","123456","1");
+            UserAccount account2 = new UserAccount("teacher1","123456","2");
+            UserAccount account3 = new UserAccount("teacher2","123456","3");
+            UserAccount account4 = new UserAccount("student1","123456","4");
+            UserAccount account5 = new UserAccount("student2","123456","5");
+            DbManager db = x.getDb(daoConfig);
+
+            try {
+                db.saveOrUpdate(account1);
+                db.saveOrUpdate(account2);
+                db.saveOrUpdate(account3);
+                db.saveOrUpdate(account4);
+                db.saveOrUpdate(account5);
+            } catch (DbException e) {
+                e.printStackTrace();
+            }
+
+
+            setting.edit().putBoolean("first",false).commit();
+        }
+    }
+
+    public DbManager.DaoConfig getDaoConfig() {
+        return daoConfig;
+    }
+    private DbManager.DaoConfig daoConfig;
+    private void initDButils() {
+        x.Ext.init(this);//Xutils初始化
+        daoConfig= new DbManager.DaoConfig()
+                .setDbName("robot")//创建数据库的名称
+                .setDbVersion(1)//数据库版本号
+               ;//数据库更新操作
+    }
+
+
 }

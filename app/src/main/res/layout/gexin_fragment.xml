@@ -69,7 +69,17 @@
             android:background="@drawable/delshape"
             android:layout_margin="10dp"/>
     </LinearLayout>
-
+    <Button
+        android:id="@+id/btn_mode_gexin"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="模式切换"
+        android:background="@drawable/anniu_btn"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:textColor="#fff"
+        android:textSize="20sp"/>
 
 
 </LinearLayout>

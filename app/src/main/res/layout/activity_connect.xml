@@ -12,28 +12,66 @@
     >
 
 
-    <Button
-        android:id="@+id/rb_wifimode"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/wifimode"
-        android:text="点 击 连 接 至 WIFI 路 由 器"
-        android:textAlignment="center"
-        android:textColor="#fff"
-        android:textSize="20sp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
 
 
-    <Button
-        android:id="@+id/btn_connectRobot"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="60dp"
-        android:enabled="false"
-        android:text="连接机器人"
-        android:textColor="#fff"
-        android:textSize="20sp"/>
 
 
+
+                <Button
+                    android:id="@+id/rb_apmode"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/apmode"
+                    android:text="连 接 至 本 手 机 热 点"
+                    android:textSize="20sp"
+                    android:textAlignment="center"
+                    android:textColor="#fff" />
+
+                <Button
+                    android:id="@+id/rb_wifimode"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="30dp"
+                    android:background="@drawable/wifimode"
+                    android:textSize="20sp"
+                    android:text="连 接 至 WIFI 路 由 器"
+                    android:textAlignment="center"
+                    android:textColor="#fff" />
+
+
+
+        <Button
+            android:id="@+id/btn_connectRobot"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="60dp"
+            android:text="连接机器人"
+            android:textColor="#fff"
+            android:textSize="20sp"
+            android:enabled="false"/>
+
+        <TextView
+            android:id="@+id/textstatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="15sp"
+            android:layout_marginTop="30dp"/>
+
+        <TextView
+            android:id="@+id/textstatus2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="#fff"
+            android:textSize="15sp"
+            android:layout_marginTop="30dp"/>
+    </LinearLayout>
 </LinearLayout>

@@ -36,6 +36,8 @@ public class OneFragment extends BaseFragment {
     Button oneYougongfanBtn;
     @BindView(R.id.one_daoliBtn)
     Button oneDaoliBtn;
+    @BindView(R.id.one_fragment_other)
+    Button oneOther;
     Unbinder unbinder;
 
     public OneFragment() {
